@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -40,6 +41,12 @@ public class TransferController {
         
     }  
 
+    @GetMapping("/findAll")
+    public ResponseEntity<?> findAllAccount(){
+    	List<Account> account = transferService.FindAllAccount();
+    	return ResponseEntity.ok(account);
+    }
+    
     /*
     @PostMapping
     public ResponseEntity<String> testTransfer(@RequestBody String s) {

@@ -8,9 +8,7 @@ public class ServerTransferApp {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ServerTransferApp.class, args);    	
-		// TODO Auto-generated method stub	
-		//Tester chargement...
-
+		
 	}
 }
 

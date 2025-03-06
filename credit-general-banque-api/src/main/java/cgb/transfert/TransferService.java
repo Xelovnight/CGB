@@ -1,9 +1,13 @@
 package cgb.transfert;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+
 import jakarta.transaction.Transactional;
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class TransferService {
@@ -46,5 +50,11 @@ public class TransferService {
 
         return transferRepository.save(transfer);
         }
+    }
+    
+    @GetMapping
+    public List<Account> FindAllAccount() {
+    	 return accountRepository.findAll();
+    	
     }
 }
