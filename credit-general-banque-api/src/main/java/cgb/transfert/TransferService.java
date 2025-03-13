@@ -53,7 +53,7 @@ public class TransferService {
     }
     
     @GetMapping
-    public List<Account> FindAllAccount() {
+    public List<Account> findAllAccount() {
     	 return accountRepository.findAll();
     	
     }

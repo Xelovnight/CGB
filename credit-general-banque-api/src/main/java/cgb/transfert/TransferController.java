@@ -43,7 +43,7 @@ public class TransferController {
 
     @GetMapping("/findAll")
     public ResponseEntity<?> findAllAccount(){
-    	List<Account> account = transferService.FindAllAccount();
+    	List<Account> account = transferService.findAllAccount();
     	return ResponseEntity.ok(account);
     }
     
