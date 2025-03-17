@@ -73,52 +73,43 @@ public class appliTest {
 				.andExpect(content().json(expectedJson));
 	}
 
-	public class TransferControllerTest {
+	@Test
 
-		@Autowired
-		private MockMvc mockMvc;
-
-		// Test for successful transfer creation
-		@Test
-
-		public void createTransferTest_Success() throws Exception {
-			Transfer transfer = new Transfer();
-			transfer.setAmount(10.0);
-			transfer.setDescription("Test du transfer");
-			transfer.setDestinationAccountNumber("123456789");
-			transfer.setSourceAccountNumber("987654321");
-			transfer.setTransferDate(LocalDate.parse("2018-12-06"));
-			mockMvc.perform(post("/api/transfers").contentType(MediaType.APPLICATION_JSON).content(asJsonString(transfer)))
-					.andExpect(status().isOk())
-					.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
-					.andExpect(MockMvcResultMatchers.jsonPath("$.id").exists());
-		}
-
-		@Test
-		public void createTransferTest_Failure() throws Exception {
-			Transfer transfer = new Transfer();
-			transfer.setAmount(40000.0);
-			transfer.setDescription("Test du transfer");
-			transfer.setDestinationAccountNumber("123456789");
-			transfer.setSourceAccountNumber("987654321");
-			transfer.setTransferDate(LocalDate.parse("2018-12-06"));
-			mockMvc.perform(post("/api/transfers").content(asJsonString(transfer)).contentType(MediaType.APPLICATION_JSON))
-					.andExpect(status().isBadRequest());
-		}
-
-		public static String asJsonString(final Object obj) {
-			try {
-				return new ObjectMapper().findAndRegisterModules().writeValueAsString(obj);
-			} catch (Exception e) {
-				throw new RuntimeException(e);
-			}
-		}
+	public void createTransferTest_Success() throws Exception {
+		Transfer transfer = new Transfer();
+		transfer.setAmount(10.0);
+		transfer.setDescription("Test du transfer");
+		transfer.setDestinationAccountNumber("123456789");
+		transfer.setSourceAccountNumber("987654321");
+		transfer.setTransferDate(LocalDate.parse("2018-12-06"));
+		mockMvc.perform(post("/api/transfers").contentType(MediaType.APPLICATION_JSON).content(asJsonString(transfer)))
+				.andExpect(status().isOk())
+				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.id").exists());
 	}
 
+	@Test
+	public void createTransferTest_Failure() throws Exception {
+		Transfer transfer = new Transfer();
+		transfer.setAmount(40000.0);
+		transfer.setDescription("Test du transfer");
+		transfer.setDestinationAccountNumber("123456789");
+		transfer.setSourceAccountNumber("987654321");
+		transfer.setTransferDate(LocalDate.parse("2018-12-06"));
+		mockMvc.perform(post("/api/transfers").content(asJsonString(transfer)).contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isBadRequest());
+	}
+
+	public static String asJsonString(final Object obj) {
+		try {
+			return new ObjectMapper().findAndRegisterModules().writeValueAsString(obj);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
 
 	@Test
 	void contextLoads() {
 	}
 
-	
 }
