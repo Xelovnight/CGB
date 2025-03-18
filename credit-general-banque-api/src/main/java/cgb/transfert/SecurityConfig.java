@@ -1,5 +1,6 @@
 package cgb.transfert;
 
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -33,13 +34,15 @@ public class SecurityConfig {
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		http
-		.csrf(csrf -> csrf.disable()) // Désactive CSRF
-		.authorizeHttpRequests(
-				(requests) -> requests.anyRequest().authenticated()
-				)
-		.httpBasic(Customizer.withDefaults());
-		return http.build();
+	    http
+	        .csrf(csrf -> csrf.disable()) // Désactive CSRF
+	        .authorizeHttpRequests(
+	            (requests) -> requests.anyRequest().authenticated()
+	        )
+	        .httpBasic(Customizer.withDefaults())
+	        // Permet l'affichage dans une iframe sur le même domaine
+	        .headers(headers -> headers.frameOptions().sameOrigin());
+	    return http.build();
 	}
 
 }

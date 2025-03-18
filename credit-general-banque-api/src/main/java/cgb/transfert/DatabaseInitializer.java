@@ -3,37 +3,44 @@ package cgb.transfert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import cgb.transfert.entity.Account;
+import cgb.transfert.repository.AccountRepository;
+import cgb.transfert.services.IbanGenerator;
 import jakarta.annotation.PostConstruct;
 
 @Component
 public class DatabaseInitializer {
 
-    @Autowired
-    private AccountRepository accountRepository;
+	@Autowired
+	private AccountRepository accountRepository;
 
-    @PostConstruct
-    public void init() {
-        // Vérifiez si la base de données est vide avant d'insérer des données
-        if (accountRepository.count() == 0) {
-           insertSampleData(accountRepository);
-        }
-    }
+	@PostConstruct
+	public void init() {
+		// Vérifiez si la base de données est vide avant d'insérer des données
+		if (accountRepository.count() == 0) {
+			insertSampleData(accountRepository);
+		}
+	}
 
-    public static void insertSampleData(AccountRepository accountRepository) {
-        // Insérer des comptes d'exemple
-        Account account1 = new Account();
-        account1.setAccountNumber("123456789");
-        account1.setSolde(300.00);
-        accountRepository.save(account1);
+	public static void insertSampleData(AccountRepository accountRepository) {
+		// Insérer des comptes d'exemple
+		for (int i = 0; i < 20; i++) {
+			Account account = new Account();
+			IbanGenerator ibanGenerator = new IbanGenerator();
+			account.setAccountNumber(ibanGenerator.generateValidIban());
+			account.setSolde(300.00 + (i * 100.00));
+			accountRepository.save(account);
+		}
 
-        Account account2 = new Account();
-        account2.setAccountNumber("987654321");
-        account2.setSolde(500.00);
-        accountRepository.save(account2);
+		Account account2 = new Account();
+		account2.setAccountNumber("FR7630001007941234567890185");
+		account2.setSolde(60000.00);
+		accountRepository.save(account2);
 
-        Account account3 = new Account();
-        account3.setAccountNumber("456789123");
-        account3.setSolde(2000.00);
-        accountRepository.save(account3);
-    }
+		Account account3 = new Account();
+		account3.setAccountNumber("FR7630004000031234567890143");
+		account3.setSolde(90000.00);
+		accountRepository.save(account3);
+
+	}
 }
