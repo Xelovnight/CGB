@@ -1,4 +1,4 @@
-package cgb.transfert;
+package cgb.transfert.exceptions;
 
 public abstract class ExceptionInvalideIBAN extends Exception{
 

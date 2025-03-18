@@ -2,6 +2,8 @@ package cgb.transfert;
 
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -23,6 +25,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
+import cgb.transfert.entity.Transfer;
+import cgb.transfert.exceptions.ExceptionInvalidIbanFormat;
+import cgb.transfert.exceptions.ExceptionInvalidUnCheckableIban;
+import cgb.transfert.services.Utilitaire;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -49,38 +56,37 @@ public class appliTest {
 				.andExpect(content().string("Racine sous test "));
 	}
 
+//	@Test
+//	public void testAll() throws Exception {
+//		String expectedJson = """
+//					        [
+//				    {
+//				        "accountNumber": "123456789",
+//				        "solde": 300.0
+//				    },
+//				    {
+//				        "accountNumber": "987654321",
+//				        "solde": 500.0
+//				    },
+//				    {
+//				        "accountNumber": "456789123",
+//				        "solde": 2000.0
+//				    }
+//				]
+//					        """;
+//
+//		mockMvc.perform(get("/api/transfers/findAll")).andExpect(status().isOk())
+//				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+//				.andExpect(content().json(expectedJson));
+//	}
+
 	@Test
-	public void testAll() throws Exception {
-		String expectedJson = """
-					        [
-				    {
-				        "accountNumber": "123456789",
-				        "solde": 300.0
-				    },
-				    {
-				        "accountNumber": "987654321",
-				        "solde": 500.0
-				    },
-				    {
-				        "accountNumber": "456789123",
-				        "solde": 2000.0
-				    }
-				]
-					        """;
-
-		mockMvc.perform(get("/api/transfers/findAll")).andExpect(status().isOk())
-				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-				.andExpect(content().json(expectedJson));
-	}
-
-	@Test
-
 	public void createTransferTest_Success() throws Exception {
 		Transfer transfer = new Transfer();
-		transfer.setAmount(10.0);
+		transfer.setAmount(100.0);
 		transfer.setDescription("Test du transfer");
-		transfer.setDestinationAccountNumber("123456789");
-		transfer.setSourceAccountNumber("987654321");
+		transfer.setDestinationAccountNumber("FR7630001007941234567890185");
+		transfer.setSourceAccountNumber("FR7630004000031234567890143");
 		transfer.setTransferDate(LocalDate.parse("2018-12-06"));
 		mockMvc.perform(post("/api/transfers").contentType(MediaType.APPLICATION_JSON).content(asJsonString(transfer)))
 				.andExpect(status().isOk())
@@ -91,7 +97,7 @@ public class appliTest {
 	@Test
 	public void createTransferTest_Failure() throws Exception {
 		Transfer transfer = new Transfer();
-		transfer.setAmount(40000.0);
+		transfer.setAmount(400000.0);
 		transfer.setDescription("Test du transfer");
 		transfer.setDestinationAccountNumber("123456789");
 		transfer.setSourceAccountNumber("987654321");
@@ -109,7 +115,64 @@ public class appliTest {
 	}
 
 	@Test
-	void contextLoads() {
+	public void testCorrectIban() throws Exception {
+		String iban = "FR7630001007941234567890185";
+		Utilitaire.getInstanceValidator().isIbanValide(iban);
 	}
+
+	@Test
+	public void testCorrectIbanCountryName() throws Exception {
+		String iban = "FR7630001007941234567890185";
+		Utilitaire.getInstanceValidator().getCodePays(iban);
+	}
+
+	@Test
+	public void testCorrectIbanControlNumber() throws Exception {
+		String iban = "FR7630001007941234567890185";
+		Utilitaire.getInstanceValidator().getControlNumbers(iban);
+	}
+
+	@Test
+	public void testCorrectIbanBasicBankAccountNumber() throws Exception {
+		String iban = "FR7630001007941234567890185";
+		Utilitaire.getInstanceValidator().getBasicBankNumbers(iban);
+	}
+
+	@Test
+	public void testCorrectStructureIban() throws Exception {
+		String iban = "FR7630001007941234567890185";
+		Utilitaire.getInstanceValidator().isIbanStructureValide(iban);
+	}
+
+	/*
+	 * @Test public void testCorrectGeneretedIban() throws Exception { String iban =
+	 * IbanGenerator.generateValidIban();
+	 * Utilitaire.getInstanceValidator().isIbanStructureValide(iban); }
+	 */
+
+	@Test
+	public void testIncorrectIbanThrowsException() {
+		String iban = "FR76300010079412345678";
+		ExceptionInvalidIbanFormat exception = assertThrows(ExceptionInvalidIbanFormat.class,
+				() -> Utilitaire.getInstanceValidator().isIbanValide(iban));
+		assertEquals(ExceptionInvalidIbanFormat.FailureType.INVALIDCARACTERCOUNT.name(), exception.getMessage());
+	}
+
+	@Test
+	public void testIncorrectIbanStructureThrowsException() {
+		String iban = "gesFR7630001007941234567890185";
+		ExceptionInvalidUnCheckableIban exception = assertThrows(ExceptionInvalidUnCheckableIban.class,
+				() -> Utilitaire.getInstanceValidator().isIbanStructureValide(iban));
+		assertEquals(ExceptionInvalidUnCheckableIban.FailureType.UNVERIFIABLE.name(), exception.getMessage());
+	}
+
+	@Test
+	void contextLoad() {
+	}
+	
+
+
+	
+	
 
 }

@@ -1,9 +1,12 @@
-package cgb.transfert;
+package cgb.transfert.services;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.validator.routines.IBANValidator;
+
+import cgb.transfert.exceptions.ExceptionInvalidIbanFormat;
+import cgb.transfert.exceptions.ExceptionInvalidUnCheckableIban;
 
 public class Utilitaire {
 

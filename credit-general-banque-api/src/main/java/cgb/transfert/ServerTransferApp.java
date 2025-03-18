@@ -1,7 +1,13 @@
 package cgb.transfert;
 
+
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
+
+import cgb.transfert.services.Utilitaire;
+
 
 @SpringBootApplication
 public class ServerTransferApp {
@@ -11,7 +17,7 @@ public class ServerTransferApp {
 		try {
 			Utilitaire u = Utilitaire.getInstanceValidator();
 
-			String touc = "FR7630004000031234567890143";
+			String touc = "FR6248234291492680058379044";
 
 			System.out.println("resultat !!!!!!!!! : " + u.isIbanStructureValide(touc));
 
