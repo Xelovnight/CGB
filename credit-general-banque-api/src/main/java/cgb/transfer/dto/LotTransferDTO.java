@@ -13,7 +13,7 @@ public class LotTransferDTO {
 
 	private Etat etatLotTransfer;
 	private List<TransferDTO> lotTransfers;
-
+ 
 	public LotTransferDTO() {
 	}
 
