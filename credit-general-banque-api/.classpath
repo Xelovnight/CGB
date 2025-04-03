@@ -36,14 +36,5 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/dylan.ait-eldjoudi/.m2/repository/com/google/protobuf/protobuf-java/3.21.9/protobuf-java-3.21.9.jar" sourcepath="C:/Users/dylan.ait-eldjoudi/.m2/repository/com/google/protobuf/protobuf-java/3.21.9/protobuf-java-3.21.9-sources.jar">
-		<attributes>
-			<attribute name="maven.pomderived" value="true"/>
-			<attribute name="maven.groupId" value="com.google.protobuf"/>
-			<attribute name="maven.artifactId" value="protobuf-java"/>
-			<attribute name="maven.version" value="3.21.9"/>
-			<attribute name="maven.scope" value="compile"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

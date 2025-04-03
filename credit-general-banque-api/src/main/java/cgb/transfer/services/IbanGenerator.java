@@ -1,4 +1,4 @@
-package cgb.transfert.services;
+package cgb.transfer.services;
 import java.util.Random;
 
 public class IbanGenerator {

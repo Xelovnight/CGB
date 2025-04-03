@@ -1,4 +1,4 @@
-package cgb.transfert.controllers;
+package cgb.transfer.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

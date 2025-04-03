@@ -1,6 +1,6 @@
-package cgb.transfert.exceptions;
+package cgb.transfer.exceptions;
 
-import cgb.transfert.exceptions.ExceptionInvalidUnCheckableIban.FailureType;
+import cgb.transfer.exceptions.ExceptionInvalidUnCheckableIban.FailureType;
 
 public class ExceptionInvalidIbanFormat extends ExceptionInvalideIBAN{
 

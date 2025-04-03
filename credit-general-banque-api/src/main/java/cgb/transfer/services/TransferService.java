@@ -1,14 +1,13 @@
-package cgb.transfert.services;
+package cgb.transfer.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import cgb.transfert.entity.Account;
-import cgb.transfert.entity.Transfer;
-import cgb.transfert.repository.AccountRepository;
-import cgb.transfert.repository.TransferRepository;
+import cgb.transfer.entity.Account;
+import cgb.transfer.entity.Transfer;
+import cgb.transfer.repository.AccountRepository;
+import cgb.transfer.repository.TransferRepository;
 import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
@@ -56,9 +55,36 @@ public class TransferService {
         }
     }
     
+    @Transactional
+    public void createTransferForLot(String sourceAccountNumber, String destinationAccountNumber,
+                                   Double amount, LocalDate transferDate, String description) {
+        Account sourceAccount = accountRepository.findById(sourceAccountNumber)
+                				.orElseThrow(() -> new RuntimeException("Source account not found"));
+        Account destinationAccount = accountRepository.findById(destinationAccountNumber)
+                				.orElseThrow(() -> new RuntimeException("Destination account not found"));
+
+        if (sourceAccount.getSolde().compareTo(amount) < 0) {
+            throw new RuntimeException("Insufficient funds");
+        }else {
+
+        sourceAccount.setSolde(sourceAccount.getSolde()-(amount)); 
+        destinationAccount.setSolde(destinationAccount.getSolde()+(amount));
+
+        accountRepository.save(sourceAccount);
+        accountRepository.save(destinationAccount);
+
+        }
+    }
+    
     @GetMapping
     public List<Account> findAllAccount() {
     	 return accountRepository.findAll();
+    	
+    }
+    
+    @GetMapping
+    public List<Transfer> findAllTransfer() {
+    	 return transferRepository.findAll();
     	
     }
 }
