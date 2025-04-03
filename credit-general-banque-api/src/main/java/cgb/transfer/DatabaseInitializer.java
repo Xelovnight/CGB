@@ -1,11 +1,11 @@
-package cgb.transfert;
+package cgb.transfer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import cgb.transfert.entity.Account;
-import cgb.transfert.repository.AccountRepository;
-import cgb.transfert.services.IbanGenerator;
+import cgb.transfer.entity.Account;
+import cgb.transfer.repository.AccountRepository;
+import cgb.transfer.services.IbanGenerator;
 import jakarta.annotation.PostConstruct;
 
 @Component

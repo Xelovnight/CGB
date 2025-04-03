@@ -1,4 +1,4 @@
-package cgb.transfert.entity;
+package cgb.transfer.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

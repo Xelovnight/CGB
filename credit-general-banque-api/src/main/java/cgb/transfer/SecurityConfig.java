@@ -1,4 +1,4 @@
-package cgb.transfert;
+package cgb.transfer;
 
 
 import org.springframework.context.annotation.Bean;
