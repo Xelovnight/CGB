@@ -25,7 +25,7 @@ public class LotTransferDTO {
 		this.etatLotTransfer = etatLotTransfer;
 		this.lotTransfers = lotTransfers;
 		this.sourceAccountNumber = sourceAccountNumber;
-		this.reference = reference;
+		this.reference = reference; 
 	}
 
 	public LotTransferDTO(String descriptionLot, String sourceAccountNumber, String reference,
