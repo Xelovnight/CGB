@@ -15,7 +15,7 @@ import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/api/lotTransfers")
-public class LotTransferControler {
+public class LotTransferController {
 
 	@Autowired
 	private LotTransferService lotTransferService;

@@ -3,6 +3,7 @@ package cgb.transfer;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain; 
@@ -29,6 +30,7 @@ import org.springframework.security.web.SecurityFilterChain;
  * Attention ce mécanisme de base n'inclus par de chiffrement http. 
  * 
  */
+@EnableAsync
 @Configuration
 public class SecurityConfig {
 
