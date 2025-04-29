@@ -1,13 +1,17 @@
 package cgb.transfer.services;
 
 import java.time.LocalDate;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+
+import cgb.transfer.Etat;
+import cgb.transfer.entity.Log;
 import cgb.transfer.entity.LotTransfer;
 import cgb.transfer.entity.Transfer;
 import cgb.transfer.repository.LotTransferRepository;
-import jakarta.transaction.Transactional;
 
 @Service
 public class LotTransferService {
@@ -18,13 +22,33 @@ public class LotTransferService {
 	@Autowired
 	private TransferService transferService;
 
-	@Transactional
-	public LotTransfer sauvegarderLotTransfer(LotTransfer lotTransfer) {
+	@Autowired
+	private LogService logService;
+
+	@Async
+	public void traitementLotTransfer(LotTransfer lotTransfer) {
 		
-		for(Transfer t : lotTransfer.getLotTransfer()) {
-			transferService.createTransferForLot(t.getSourceAccountNumber(), t.getDestinationAccountNumber(), t.getAmount(),t.getTransferDate() ,t.getDescription());
+		try {
+
+			lotTransferRepository.save(lotTransfer);
+			TimeUnit.SECONDS.sleep(10);
+			for(Transfer t : lotTransfer.getLotTransfer()) {
+				transferService.createTransferForLot(t.getSourceAccountNumber(), t.getDestinationAccountNumber(), t.getAmount(),t.getTransferDate() ,t.getDescription());
+				t.setEtatTransfer(Etat.SUCCESS);
+			}
+			lotTransfer.setEtatLotTransfer(Etat.SUCCESS);
+			lotTransferRepository.save(lotTransfer);
+			
+			logService.saveLog(
+					new Log("Lot Transfer Réussie", lotTransfer.getEtatLotTransfer(), LocalDate.now(), this.getClass().getSimpleName()));
+			
+			
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
-		return lotTransferRepository.save(lotTransfer);
+		
+		
+	
 	}
 
 	public String getSourceAcccountCode() {

@@ -5,16 +5,24 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import cgb.transfer.Etat;
 import cgb.transfer.entity.Account;
+import cgb.transfer.entity.Log;
 import cgb.transfer.entity.Transfer;
 import cgb.transfer.entity.TransferRequest;
+import cgb.transfer.services.LogService;
 import cgb.transfer.services.TransferService;
+
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/transfers")
 public class TransferController {
 
+	@Autowired
+	private LogService logService;
+	
 	@Autowired
 	private TransferService transferService;
 
@@ -26,9 +34,14 @@ public class TransferController {
 			Transfer transfer = transferService.createTransfer(transferRequest.getSourceAccountNumber(),
 					transferRequest.getDestinationAccountNumber(), transferRequest.getAmount(),
 					transferRequest.getTransferDate(), transferRequest.getDescription());
+			logService.saveLog(
+					new Log("Lot Transfer Réussie", Etat.SUCCESS, LocalDate.now(), this.getClass().getSimpleName()));
+			
 			return ResponseEntity.ok(transfer);
 		} catch (RuntimeException e) {
 			TransferResponse errorResponse = new TransferResponse("FAILURE", e.getMessage());
+			logService.saveLog(
+					new Log("Transfer échoué", Etat.FAILED, LocalDate.now(), this.getClass().getSimpleName()));
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
 		}
 

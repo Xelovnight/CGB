@@ -1,8 +1,9 @@
 package cgb.transfer.entity;
 
-import cgb.transfer.dto.Etat;
 import jakarta.persistence.*;
 import java.time.LocalDate;
+
+import cgb.transfer.Etat;
 
 @Entity
 public class Transfer {
@@ -14,7 +15,7 @@ public class Transfer {
 	private Double amount;
 	private LocalDate transferDate;
 	private String description;
-
+	@Enumerated(EnumType.STRING)
 	private Etat etatTransfer;
 
 

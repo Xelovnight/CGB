@@ -5,7 +5,9 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import cgb.transfer.Etat;
 import cgb.transfer.entity.Account;
+import cgb.transfer.entity.Log;
 import cgb.transfer.entity.Transfer;
 import cgb.transfer.repository.AccountRepository;
 import cgb.transfer.repository.TransferRepository;
@@ -22,6 +24,9 @@ public class TransferService {
 	@Autowired
 	private TransferRepository transferRepository;
 
+	@Autowired
+	private LogService logService;
+	
 	/*
 	 * Rappel du cours sur les transactions... Tout ou rien
 	 */
@@ -33,6 +38,9 @@ public class TransferService {
 		Account destinationAccount = accountRepository.findById(destinationAccountNumber)
 				.orElseThrow(() -> new RuntimeException("Destination account not found"));
 
+		logService.saveLog(
+				new Log("Création d'un transfer", Etat.WAITING, LocalDate.now(), this.getClass().getSimpleName()));
+		
 		/* Pas de découvert autorisé */
 		if (sourceAccount.getSolde().compareTo(amount) < 0) {
 			throw new RuntimeException("Insufficient funds");
@@ -51,14 +59,22 @@ public class TransferService {
 			transfer.setTransferDate(transferDate);
 			transfer.setDescription(description);
 
+			logService.saveLog(
+					new Log("Transfer créé", Etat.SUCCESS, LocalDate.now(), this.getClass().getSimpleName()));
+			
 			return transferRepository.save(transfer);
 		}
 	}
 
-	@Async
+	
+
 	@Transactional
 	public void createTransferForLot(String sourceAccountNumber, String destinationAccountNumber, Double amount,
 			LocalDate transferDate, String description) {
+		
+		logService.saveLog(
+				new Log("Création d'un transfer du lot", Etat.WAITING, LocalDate.now(), this.getClass().getSimpleName()));
+		
 		Account sourceAccount = accountRepository.findById(sourceAccountNumber)
 				.orElseThrow(() -> new RuntimeException("Source account not found"));
 		Account destinationAccount = accountRepository.findById(destinationAccountNumber)
@@ -74,6 +90,8 @@ public class TransferService {
 			accountRepository.save(sourceAccount);
 			accountRepository.save(destinationAccount);
 
+			logService.saveLog(
+					new Log("Transfer d'un lot créé", Etat.SUCCESS, LocalDate.now(), this.getClass().getSimpleName()));
 		}
 	}
 

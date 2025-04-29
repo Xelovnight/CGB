@@ -3,6 +3,8 @@ package cgb.transfer.dto;
 import java.time.LocalDate;
 import java.util.List;
 
+import cgb.transfer.Etat;
+
 public class LotTransferDTO {
 
 	private Long id;
