@@ -38,6 +38,7 @@ public class AuthControllerJeton {
 }
 
 
+
 class AuthenticationRequest {
     private String username;
     private String password;
