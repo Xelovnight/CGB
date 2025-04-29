@@ -3,9 +3,11 @@ package cgb.transfer.entity;
 import java.time.LocalDate;
 import java.util.List;
 
-import cgb.transfer.dto.Etat;
+import cgb.transfer.Etat;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -22,7 +24,7 @@ public class LotTransfer {
 	private String sourceAccountNumber;
 	private String reference;
 	private LocalDate dateLotTransfer;
-
+	@Enumerated(EnumType.STRING)
 	private Etat etatLotTransfer;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)

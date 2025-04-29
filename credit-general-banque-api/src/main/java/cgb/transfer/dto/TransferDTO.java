@@ -2,6 +2,7 @@ package cgb.transfer.dto;
 
 import java.time.LocalDate;
 
+import cgb.transfer.Etat;
 import cgb.transfer.entity.LotTransfer;
 
 public class TransferDTO {

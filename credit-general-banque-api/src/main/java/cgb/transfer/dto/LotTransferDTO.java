@@ -3,6 +3,8 @@ package cgb.transfer.dto;
 import java.time.LocalDate;
 import java.util.List;
 
+import cgb.transfer.Etat;
+
 public class LotTransferDTO {
 
 	private Long id;
@@ -13,7 +15,7 @@ public class LotTransferDTO {
 
 	private Etat etatLotTransfer;
 	private List<TransferDTO> lotTransfers;
-
+ 
 	public LotTransferDTO() {
 	}
 
@@ -25,7 +27,7 @@ public class LotTransferDTO {
 		this.etatLotTransfer = etatLotTransfer;
 		this.lotTransfers = lotTransfers;
 		this.sourceAccountNumber = sourceAccountNumber;
-		this.reference = reference;
+		this.reference = reference; 
 	}
 
 	public LotTransferDTO(String descriptionLot, String sourceAccountNumber, String reference,
